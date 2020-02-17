@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dfsoft.mapper.TransformerMapper">
+	<select id="findTransformer" resultType="java.util.HashMap"
+		parameterType="java.lang.String">
+		SELECT ID as id,
+		NAME as name,
+		MODEL_CODE as modelCode,
+		CAPACITY as capacity
+		FROM CS_TRANSFORMER
+	</select>
+
+	<select id="findTransformerById" resultType="java.util.HashMap"
+		parameterType="java.lang.String">
+		SELECT ID as id,
+		NAME as name,
+		MODEL_CODE as modelCode,
+		CAPACITY as capacity
+		FROM CS_TRANSFORMER
+		WHERE ID = #{id}
+	</select>
+
+	<insert id="addTransformer" parameterType="hashmap">
+		INSERT INTO CS_TRANSFORMER (
+		id,name,model_code,capacity )
+		VALUES (
+		#{id,jdbcType=VARCHAR},
+		#{name,jdbcType=VARCHAR},
+		#{modelCode,jdbcType=VARCHAR},
+		#{capacity,jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<update id="updateTransformer" parameterType="hashmap">
+		update CS_TRANSFORMER
+		<set>
+			<if test="name != null">
+				name = #{name,jdbcType=VARCHAR},
+			</if>
+			<if test="description != null">
+				modelCode = #{modelCode,jdbcType=VARCHAR},
+			</if>
+			<if test="createdate != null">
+				capacity = #{capacity,jdbcType=DATE},
+			</if>
+		</set>
+		where id = #{id,jdbcType=VARCHAR}
+	</update>
+
+	<delete id="delTransformer" parameterType="java.lang.String">
+		delete from CS_TRANSFORMER where id=#{id}
+	</delete>
+
+</mapper>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dfsoft.mapper.UsersMapper">
+    <resultMap id="AuthUserPoJo" type="com.dfsoft.entity.AuthUserPoJo">
+        <id column="id" jdbcType="VARCHAR" property="userId"/>
+        <result column="user_name" jdbcType="VARCHAR" property="userName"/>
+        <result column="pass_word" jdbcType="VARCHAR" property="passWord"/>
+        <result column="status" jdbcType="VARCHAR" property="status"/>
+
+        <collection property="roleInfos" column="id" javaType="ArrayList"
+                    ofType="com.dfsoft.entity.RoleInfo" select="getRolesByUserId"/>
+        <collection property="permissionInfos" column="id" javaType="ArrayList"
+                    ofType="com.dfsoft.entity.PermissionInfo" select="getPermissionsByUserId"/>
+    </resultMap>
+    
+    <select id="getRolesByUserId" resultType="com.dfsoft.entity.RoleInfo">
+	    SELECT sri.*
+	      FROM users sui
+	     INNER JOIN map_user_role smur ON sui.id = smur.user_id
+	     INNER JOIN role_info sri ON smur.role_id = sri.id
+	     WHERE sui.id=#{id}
+    </select>
+
+    <select id="getPermissionsByUserId" resultType="com.dfsoft.entity.PermissionInfo">
+    	SELECT spi.*
+	      FROM users sui
+	     INNER JOIN  map_user_role smur ON sui.id = smur.user_id
+	     INNER JOIN  role_info sri ON smur.role_id = sri.id
+	     INNER JOIN  map_role_permission smrp ON smrp.role_id = sri.id
+	     INNER JOIN  permission_info spi ON smrp.permission_id = spi.id
+	     WHERE sui.id=#{id}
+    </select>
+    
+    <select id="findAuthUserByUsername" resultMap="AuthUserPoJo">
+    	SELECT u.id,
+               u.user_name,
+               u.pass_word,
+               u.status
+          FROM users u
+         WHERE u.user_name = #{username}
+    </select>
+</mapper>

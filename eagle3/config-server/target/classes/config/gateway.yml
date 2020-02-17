@@ -1,0 +1,142 @@
+spring: 
+  profiles: 
+    active: 
+    - dev
+---
+server:
+  port: 9005
+spring: 
+  profiles: dev
+  application: 
+    name: gateway
+  thymeleaf:
+    prefix: classpath:/templates/ #设置thymeleaf路径默认为src/main/resources/templates
+    suffix: .html  #设置thymeleaf模板后缀
+    servlet: 
+      content-type: text/html
+    cache: false   #是否开启缓存默认为true
+    mode: LEGACYHTML5  #设置thymeleaf严格校验
+    encoding: UTF-8  #设置编码
+  http: 
+    encoding:
+      force: true
+      charset: UTF-8
+      enabled: true
+  devtools: 
+    restart: 
+      enabled: true   #开启热部署
+      additional-paths: src/main/java #重启目录
+  zipkin: 
+    base-url: http://localhost:9411/
+  sleuth:
+    sampler:
+      probability: 1.0    #采样 等级~      0~1的数值   1最大
+  cloud: 
+    gateway: 
+      routes: 
+        - id: consumer   #
+          uri: lb://consumer    #lb://服务名
+          predicates: 
+          - Path=/con-zuul/**
+          filters:
+            - StripPrefix=1  #前缀， 在当前路径匹配中表示去掉第一个前缀 /data-service2
+      discovery: 
+        locator:
+          enabled: true  #开启根据微服务名称来转发
+    consul: 
+      host: localhost
+      port: 8500 
+      discovery:
+        hostname: 127.0.0.1    #服务注册consul中心上显示的IP
+  redis: 
+    host: 127.0.0.1
+    password: 
+    port: 6379
+    lettuce:
+      pool:
+        #最大等待时间
+        max-wait: 1000ms
+        #最大连接数
+        max-active: 20
+        #最大空闲数量
+        max-idle: 20
+        #最小空闲数
+        min-idle: 1
+      shutdown-timeout: 100ms
+  datasource: 
+    type: com.alibaba.druid.pool.DruidDataSource     #配置当前要使用的数据源的操作类型
+    driverClassName: oracle.jdbc.driver.OracleDriver   # 驱动  oracle
+    #url: jdbc:oracle:thin:@192.168.0.26:1521/orcl
+    url: jdbc:oracle:thin:@127.0.0.1:1521/orcl
+    username: eagle2_stable  # 账户
+    password: eagle2_stable
+    # 密码
+    dbcp2:                   # 进行数据库连接池配置 
+      min-idle: 5            # 数据连接池的最小维持的连接数
+      initial-size: 5        # 初始化提供的连接数
+      max-total: 5           # 最大的连接数
+      max-wait-millis: 200   # 等待连接获取的最大超时时间
+logging: 
+  level:
+    ssm.app.mapper : debug
+mybatis:
+  type-aliases-package: com.dfsoft.entity
+  mapper-locations: classpath:mapper/*.xml
+
+security:
+  loginAfterTime: 10
+  loginTimeLimit: 10
+    
+
+---
+spring: 
+  profiles: beta
+  application: 
+    name: gateway
+  devtools: 
+    restart:
+      enabled: true   #开启热部署
+  cloud: 
+    gateway: 
+      routes: 
+        - id: consumer
+          uri: lb://consumer    #lb://服务名
+          predicates: 
+          - Path=/con-zuul/**
+          filters: 
+            - RewritePath=/consumer/(?<segment>.*), /$\{segment}
+            - name: GateWayTokenFilter  #过滤器类名
+              args: 
+                key-resolver: '#{@uriKeyResolver}'    #redis里对应的Key值
+                redis-rate-limiter.replenishRate: 1   #每 1 s 向令牌桶里加一个令牌
+                redis-rate-limiter.burstCapacity: 2   #牌桶里最大令牌数 为 2
+#      discovery: 
+#        locator:
+#          enabled: true  #开启根据微服务名称来转发
+    consul:
+      host: localhost
+      port: 8500 
+      discovery:
+        hostname: 127.0.0.1    #服务注册consul中心上显示的IP
+server:
+  port: 9005
+#zuul: 
+#  TokenFilter:   #过滤器的启用和禁止
+#    pre: 
+#      disable: true   #false 启用和 true禁止
+#  ignored-services:  #忽略掉的名称访问服务
+#    "*"              #"*" 代表忽略所有的euruka里的微服务名称
+#  routes: 
+#    api-ribbon:
+#      path: /coc-zuul/**
+#      service-id: eagle2-coc
+#    api-producer: 
+#      path: /con-zuul/**
+#      service-id: consumer
+security: 
+#  sessions: stateless   #设置session 为无状态
+  basic: 
+    enabled: true #启动springsecutity的安全配置项
+  user: 
+    name: zroot  #认证用户名
+    password: zroot  #认证密码

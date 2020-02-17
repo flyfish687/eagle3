@@ -1,0 +1,33 @@
+encrypt: # 加密命令：curl -X POST http://localhost:8100/encrypt -d 需要加密的内容
+  key: dfsoft.com  #设置了一个加密的访问秘钥
+
+server: 
+  port: 8100
+spring: 
+  application:
+    name: config-center
+  security: 
+    user:  
+      name: root
+      password: root
+  profiles: 
+    active: native #设置为本地启动的方式，而不是通过git
+  cloud: 
+    config:
+      server:
+        native:
+          searchLocations: classpath:/config   # 配置文件所在目录，classpath（类路径）和（系统文件路径） file两种   
+#  cloud:
+#    config:
+#      server:
+#        git:   
+#          uri: https://github.com/flyfish687/springcloud
+#         username: flyfish687
+#         password: weixiao/687
+#          search-paths: #设置配置文件查找的匹配目录
+#          - producter    #目录名称要和文件名称保持一致
+#          - consumer
+#      label: master
+
+
+      

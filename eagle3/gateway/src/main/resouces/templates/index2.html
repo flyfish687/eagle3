@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+    <meta charset="UTF-8"/>
+    <title sec:authentication="name"></title>
+</head>
+<body>
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div id="navbar" class="collapse navbar-collapse">
+            <ul class="nav navbar-nav">
+                <!-- <li><a th:href="@{http://www.baidu.com}">百度</a></li> -->
+                <li><a href="/product/add">变压器添加</a></li>
+                <li><a href="/product/update">变压器修改</a></li>
+                <li><a href="/product/list">变压器查询</a></li>
+                <li><a href="/product/delete">变压器删除</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+</body>
+</html>

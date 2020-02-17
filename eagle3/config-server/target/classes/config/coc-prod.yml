@@ -1,0 +1,88 @@
+spring: 
+  profiles: 
+    active: 
+    - dev
+---
+spring: 
+  profiles: dev
+  application: 
+    name: coc-prod
+  zipkin: 
+    base-url: http://localhost:9411/
+  sleuth:
+    sampler:
+      probability: 1.0    #采样 等级~      0~1的数值   1最大
+  devtools: 
+    restart: 
+      enabled: true   #开启热部署
+      additional-paths: src/main/java #重启目录
+#      exclude: WEB-INF/**
+  cloud: 
+    consul:
+      host: localhost
+      port: 8500 
+      discovery:
+        hostname: 127.0.0.1    #服务注册consul中心上显示的IP
+  datasource: 
+    type: com.alibaba.druid.pool.DruidDataSource     #配置当前要使用的数据源的操作类型
+    driverClassName: oracle.jdbc.driver.OracleDriver   # 驱动  oracle
+    #url: jdbc:oracle:thin:@192.168.0.26:1521/orcl
+    url: jdbc:oracle:thin:@127.0.0.1:1521/orcl
+    username: eagle2_stable  # 账户
+ #     password: '{cipher}7e95323e933955c20c50e6718b9a53289ff0fb5f42a4b1a71a6e6bd3ddaa8115'
+    password: eagle2_stable
+    # 密码
+    dbcp2:                   # 进行数据库连接池配置 
+      min-idle: 5            # 数据连接池的最小维持的连接数
+      initial-size: 5        # 初始化提供的连接数
+      max-total: 5           # 最大的连接数
+      max-wait-millis: 200   # 等待连接获取的最大超时时间
+mybatis:
+  type-aliases-package: com.dfsoft.vo,com.dfsoft.entity
+  mapper-locations: classpath:mapper/*.xml
+  #config-location: classpath:mybatis/mybatis-config.xml
+# 开发时候开启 打印sql
+logging:
+  level:
+    ssm.app.mapper : debug
+server: 
+  port: 9002  #当前服务的端口
+---
+spring: 
+  profiles: beta
+  application: 
+    name: coc-prod
+  cloud:
+    consul:
+      host: localhost
+      port: 8500 
+      discovery:
+        hostname: 127.0.0.1    #服务注册consul中心上显示的IP
+  datasource: 
+    type: com.alibaba.druid.pool.DruidDataSource
+    driverClassName: oracle.jdbc.driver.OracleDriver   # 驱动  oracle
+    url: jdbc:oracle:thin:@192.168.0.26:1521/orcl
+    #url: jdbc:oracle:thin:@127.0.0.1:1521/orcl
+    username: eagle2_stable  # 账户
+ #     password: '{cipher}7e95323e933955c20c50e6718b9a53289ff0fb5f42a4b1a71a6e6bd3ddaa8115'
+    password: eagle2_stable
+    # 密码
+    dbcp2:                   # 进行数据库连接池配置 
+      min-idle: 5            # 数据连接池的最小维持的连接数
+      initial-size: 5        # 初始化提供的连接数
+      max-total: 5           # 最大的连接数
+      max-wait-millis: 200   # 等待连接获取的最大超时时间
+mybatis:
+  type-aliases-package: com.dfsoft.vo
+  mapper-locations: classpath:mapper/*.xml
+  #config-location: classpath:mybatis/mybatis-config.xml
+# 开发时候开启 打印sql
+logging:
+  level:
+    ssm.app.mapper : debug
+eureka: 
+  client:
+    service-url:
+      defaultZone: http://rootEuruka:rootEuruka@127.0.0.1:9000/eureka/
+server: 
+  port: 9902  #当前服务的端口

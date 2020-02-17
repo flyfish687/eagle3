@@ -1,0 +1,98 @@
+spring: 
+  profiles: 
+    active: 
+    - dev
+---
+spring: 
+  profiles: dev
+  application: 
+    name: coc
+  devtools: 
+    restart: 
+      enabled: true   #开启热部署
+      additional-paths: src/main/java #重启目录
+  zipkin: 
+    base-url: http://localhost:9411/
+  sleuth:
+    sampler:
+      probability: 1.0    #采样 等级~      0~1的数值   1最大
+  cloud: 
+    consul: 
+      host: localhost
+      port: 8500 
+      discovery:
+        hostname: 127.0.0.1    #服务注册consul中心上显示的IP
+#eureka: 
+#  client: 
+#    serviceUrl:
+#      defaultZone: http://rootEuruka:rootEuruka@127.0.0.1:9000/eureka/
+server:
+  port: 9004
+feign: 
+  hystrix:
+    enabled: true   #开启熔点机制
+  compression:
+    request:
+      mime-types:   #可以压缩的类型
+      - text/xml
+      - application/xml
+      - application/json
+      min-request-size: 2048  #超过2048的字节进行压缩
+logging:
+  level:
+    com.dfsoft.service: DEBUG 
+    
+stu-provide:
+  ribbon: 
+    NFLoadBalancerRuleClassName: com.netflix.loadbalancer.RandomRule #配置规则 随机
+#    NFLoadBalancerRuleClassName: com.netflix.loadbalancer.RoundRobinRule #配置规则 轮询
+#    NFLoadBalancerRuleClassName: com.netflix.loadbalancer.RetryRule #配置规则 重试
+#    NFLoadBalancerRuleClassName: com.netflix.loadbalancer.WeightedResponseTimeRule #配置规则 响应时间权重
+#    NFLoadBalancerRuleClassName: com.netflix.loadbalancer.BestAvailableRule #配置规则 最空闲连接策略
+    ConnectTimeout: 1000 #请求连接超时时间
+    ReadTimeout: 5000 #请求处理的超时时间
+    OkToRetryOnAllOperations: true #对所有请求都进行重试
+    MaxAutoRetriesNextServer: 2 #切换实例的重试次数
+    MaxAutoRetries: 1 #对当前实例的重试次数
+    
+ 
+---
+spring: 
+  profiles: beta
+  application: 
+    name: coc
+  cloud: 
+    consul:
+      host: localhost
+      port: 8500 
+      discovery:
+        hostname: 127.0.0.1    #服务注册consul中心上显示的IP
+#eureka: 
+#  client: 
+#    serviceUrl:
+#      defaultZone: http://rootEuruka:rootEuruka@127.0.0.1:9000/eureka/
+server:
+  port: 9004
+feign: 
+  compression:
+    request:
+      mime-types:   #可以压缩的类型
+      - text/xml
+      - application/xml
+      - application/json
+      min-request-size: 2048  #超过2048的字节进行压缩
+logging:
+  level:
+    com.dfsoft.service: DEBUG 
+stu-provide:
+  ribbon: 
+    NFLoadBalancerRuleClassName: com.netflix.loadbalancer.RandomRule #配置规则 随机
+#    NFLoadBalancerRuleClassName: com.netflix.loadbalancer.RoundRobinRule #配置规则 轮询
+#    NFLoadBalancerRuleClassName: com.netflix.loadbalancer.RetryRule #配置规则 重试
+#    NFLoadBalancerRuleClassName: com.netflix.loadbalancer.WeightedResponseTimeRule #配置规则 响应时间权重
+#    NFLoadBalancerRuleClassName: com.netflix.loadbalancer.BestAvailableRule #配置规则 最空闲连接策略
+    ConnectTimeout: 500 #请求连接超时时间
+    ReadTimeout: 1000 #请求处理的超时时间
+    OkToRetryOnAllOperations: true #对所有请求都进行重试
+    MaxAutoRetriesNextServer: 2 #切换实例的重试次数
+    MaxAutoRetries: 1 #对当前实例的重试次数

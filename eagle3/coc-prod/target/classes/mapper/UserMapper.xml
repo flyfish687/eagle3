@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dfsoft.mapper.UserMapper">
+
+    <select id="findUserByName" resultType="com.dfsoft.vo.User" parameterType="java.lang.String">
+        SELECT ID as id, 
+               NAME as name, 
+               ACCOUNT as account,
+               SEX as sex,
+               PWD as password
+          FROM BOOT_USER
+         WHERE ACCOUNT=#{account}
+    </select>
+    
+    <select id="findUserById" resultType="com.dfsoft.vo.User" parameterType="java.lang.String">
+        SELECT ID as id, 
+               NAME as name, 
+               ACCOUNT as account,
+               SEX as sex,
+               PWD as password
+          FROM BOOT_USER
+         WHERE ID = #{id}
+    </select>
+    
+    <select id="findUserList" resultType="com.dfsoft.vo.User">
+        SELECT ID as id, 
+               NAME as name, 
+               ACCOUNT as account,
+               SEX as sex,
+               PWD as password
+          FROM BOOT_USER
+    </select>
+</mapper>

@@ -1,0 +1,78 @@
+spring: 
+  profiles: 
+    active: 
+    - dev
+---
+spring: 
+  profiles: dev
+  application: 
+    name: rabbitmq
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+# 这里不需要加/，rabbitMQ 默认就有个/，加了会有2个
+# springboot 会直接把这个值赋值给虚拟主机变量,默认虚拟主机为 “/”
+#    virtual-host: dfsoftvi
+    publisher-confirms:  true #消息发送到交换机确认机制，是否确认回调
+    publisher-returns: true #消息发送到交换机确认机制，是否返回回调
+    listener:
+      simple:
+        acknowledge-mode: manual #采用手动应答模式
+        concurrency: 1 #指定最小的消费者数量
+        max-concurrency: 1 #指定最大的消费者数量
+        retry:
+          enabled: true #是否支持重试
+  cloud: 
+    consul: 
+      host: localhost
+      port: 8500 
+      discovery:
+        hostname: 127.0.0.1    #服务注册consul中心上显示的IP
+  devtools: 
+    restart: 
+      enabled: true   #开启热部署
+      additional-paths: src/main/java #重启目录
+#      exclude: WEB-INF/**
+  zipkin: 
+    base-url: http://localhost:9411/
+  sleuth:
+    sampler:
+      probability: 1.0    #采样 等级~      0~1的数值   1最大
+#logging:
+#  level:
+#    com.dfsoft.service: DEBUG
+server:
+  port: 8101  #当前服务的端口
+---
+spring: 
+  profiles: beta
+  application: 
+    name: rabbitmq
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+# 这里不需要加/，rabbitMQ 默认就有个/，加了会有2个
+# springboot 会直接把这个值赋值给虚拟主机变量
+    virtual-host: dfsoftvi
+    publisher-confirms:  true #消息发送到交换机确认机制，是否确认回调
+    publisher-returns: true #消息发送到交换机确认机制，是否返回回调
+    listener:
+      simple:
+        acknowledge-mode: manual #采用手动应答模式
+        concurrency: 1 #指定最小的消费者数量
+        max-concurrency: 1 #指定最大的消费者数量
+        retry:
+          enabled: true #是否支持重试
+logging:
+  level:
+    com.dfsoft.service: DEBUG
+eureka:
+  client:
+    service-url:
+      defaultZone: http://rootEuruka:rootEuruka@127.0.0.1:9000/eureka/
+server:
+  port: 8101  #当前服务的端口

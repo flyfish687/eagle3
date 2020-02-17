@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<title>Ela Admin - HTML5 Admin Template</title>
+<meta name="description" content="Ela Admin - HTML5 Admin Template" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+  }
+  *:focus {
+    outline: none;
+  }
+  body {
+    height: 100vh;
+    background-color: #F9F9F9;
+  }
+  .container {
+    display: flex;
+    justify-content: center;
+  }
+  .login-logo {
+    margin-bottom: 20px;
+  }
+  .login-content {
+    margin-top: 150px;
+  }
+  .login-form > form {
+    display: flex;
+    flex-direction: column;
+  }
+  .form-group, .checkbox {
+    height: 50px;
+    line-height: 50px;
+  }
+  .form-group > input {
+    height: 20px;
+    border-radius: 8px;
+    border-style: none;
+    border: 1px solid #CCC;
+    padding-left: 10px;
+  }
+  .form-group > label {
+    display: inline-block;
+    width: 65px;
+  }
+  button {
+    font-size: 18px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    cursor: pointer;
+  }
+  button:focus {
+    background-color: #187CB7;
+  }
+</style>
+
+</head>
+<body class="bg-dark">
+	<div class="sufee-login d-flex align-content-center flex-wrap">
+		<div class="container">
+			<div class="login-content">
+				<div class="login-logo">
+					<h1 style="color: #57bf95;">欢迎来到大方软件</h1>
+				</div>
+				<div class="login-form">
+					<form th:action="login" method="post">
+						<div class="form-group">
+							<label>用户名：</label> 
+							<input type="text" class="form-control" name="username" placeholder="Username" />
+							<br/>
+						</div>
+						<div class="form-group">
+							<label>密码：</label> 
+							<input type="password" class="form-control" name="password" placeholder="Password" />
+							<br/>
+						</div>
+						<div class="checkbox">
+							<label> <input type="checkbox" /> 保存登录信息</label>
+							<br/>
+						</div>
+						<button type="submit"
+							class="btn btn-success btn-flat m-b-30 m-t-30"
+							style="font-size: 18px;">登录</button>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
