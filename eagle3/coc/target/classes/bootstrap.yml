@@ -1,0 +1,9 @@
+spring:
+  cloud:
+    config:
+      name: coc  #定义要读取的资源文件名称
+      profile: dev  #定义profile的文件名称
+#      lable: master   #定义配置文件所在的分支
+      uri: http://127.0.0.1:8100  #SpringCloudConfigServer的服务地址
+      username: root  #连接的用户名
+      password: root  #连接的密码
